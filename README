@@ -52,3 +52,4 @@ Smooth, responsive controls
 To run the game
 Download Python here: https://www.python.org/downloads/
 Use Python Launcher or just click the file to launch POLYCORE!
+BUT BEFORE LAUNCHING --> Use pip3 install pygame but first if you havent already search how to install pip and do both in your command line
