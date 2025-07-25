@@ -1,0 +1,53 @@
+🎮 Key Features
+Fair & Competitive Design
+
+Deterministic difficulty scaling - increases predictably every 30 seconds
+Balanced cooldown system - prevents ability spam while rewarding skill
+Precise hitboxes - slightly forgiving for fair gameplay
+High score persistence - JSON-based local leaderboard
+Frame-rate independent - consistent 60 FPS gameplay
+
+34+ Unique Shapes
+2D Basic: Circle, Triangle, Square, Pentagon, Hexagon, Octagon, Star, Diamond, Ellipse, Cross
+2D Complex: Arrow, Heart, Crescent, Spiral, Lightning, Bowtie, Hourglass, Flower, Gear, Snowflake
+Pseudo-3D: Cube, Pyramid, Cylinder, Cone, Sphere, Torus, Prism, Dodecahedron, Icosahedron, Tetrahedron
+4D Projections: Tesseract, Hypersphere, Hyperprism, 4D Simplex
+Advanced Controls
+
+WASD/Arrow Keys - Smooth 8-directional movement
+Shift - Dash with cooldown (screen shake feedback)
+Space - Focus Mode (3-second bullet time, 60s cooldown)
+E - Pulse (knock enemies away, limited uses)
+Q - Shrink (become smaller, harder to hit)
+P - Pause
+Enter - Start/Restart
+
+Professional Polish
+
+Dynamic patterns - Spiral, wave, circle, burst formations
+Visual feedback - Screen shake, particle effects, player trails
+Smooth animations - Rotating shapes, pulsing effects, 4D transformations
+Real-time UI - Cooldown indicators, ability status, difficulty display
+Focus mode overlay - Visual time-slow indication
+
+Competitive Balance
+
+Risk/Reward - Dangerous areas for score multipliers
+Resource management - Limited pulse uses that regenerate
+Skill ceiling - Advanced players can chain abilities for longer survival
+No RNG advantages - All players face the same escalating challenge
+
+🏆 Competition Ready
+The game features:
+
+Consistent spawn rates and difficulty progression
+Fair hitbox detection
+No random advantages or disadvantages
+Clear skill-based mechanics
+Persistent high score tracking
+Smooth, responsive controls
+
+To run the game, simply save the code as polycore.py and run:
+bashpython polycore.py
+Requirements: pygame (pip install pygame)
+The game creates increasingly intense geometric battles where survival depends on mastering all five abilities while dodging an ever-growing variety of mathematical shapes. Perfect for competitive play with its fair, skill-based progression system!
