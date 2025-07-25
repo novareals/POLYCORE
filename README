@@ -1,4 +1,4 @@
-# POLYCORE
+#POLYCORE
 
 🎮 Key Features
 Fair & Competitive Design
@@ -49,7 +49,6 @@ Clear skill-based mechanics
 Persistent high score tracking
 Smooth, responsive controls
 
-To run the game, simply save the code as polycore.py and run:
-bashpython polycore.py
-Requirements: pygame (pip install pygame)
-The game creates increasingly intense geometric battles where survival depends on mastering all five abilities while dodging an ever-growing variety of mathematical shapes. Perfect for competitive play with its fair, skill-based progression system!
+To run the game
+Download Python here: https://www.python.org/downloads/
+Use Python Launcher or just click the file to launch POLYCORE!
