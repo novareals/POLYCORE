@@ -9,6 +9,7 @@ from enum import Enum
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init(frequency=22050, size=-16, channels=2, buffer=512)
 
 # Constants
 SCREEN_WIDTH = 1200
@@ -112,6 +113,12 @@ class GameState:
         self.font = pygame.font.Font(None, 36)
         self.small_font = pygame.font.Font(None, 24)
         
+        # Music system
+        self.music_enabled = True
+        self.music_volume = 0.3
+        self.current_music = None
+        self.load_music()
+        
         # Game state
         self.running = True
         self.game_active = False
@@ -147,6 +154,9 @@ class GameState:
         self.screen_shake = 0
         self.particles = []
         self.trail_points = []
+        
+        # Start menu music
+        self.play_music('menu')
 
     def load_high_score(self) -> float:
         try:
@@ -164,6 +174,64 @@ class GameState:
                 json.dump({"high_score": self.high_score}, f)
         except:
             pass
+    
+    def load_music(self):
+        """Load music files if they exist"""
+        self.music_files = {
+            'menu': None,
+            'gameplay': None,
+            'gameover': None
+        }
+        
+        # Try to load music files
+        music_paths = {
+            'menu': ['music/menu_theme.ogg', 'music/menu_theme.mp3'],
+            'gameplay': ['music/gameplay_theme.ogg', 'music/gameplay_theme.mp3'],
+            'gameover': ['music/gameover_theme.ogg', 'music/gameover_theme.mp3']
+        }
+        
+        for music_type, paths in music_paths.items():
+            for path in paths:
+                if os.path.exists(path):
+                    self.music_files[music_type] = path
+                    break
+    
+    def play_music(self, music_type, loop=-1):
+        """Play background music"""
+        if not self.music_enabled or not self.music_files.get(music_type):
+            return
+        
+        try:
+            if self.current_music != music_type:
+                pygame.mixer.music.stop()
+                pygame.mixer.music.load(self.music_files[music_type])
+                pygame.mixer.music.set_volume(self.music_volume)
+                pygame.mixer.music.play(loop)
+                self.current_music = music_type
+        except pygame.error:
+            pass  # Music file not found or invalid
+    
+    def stop_music(self):
+        """Stop background music"""
+        pygame.mixer.music.stop()
+        self.current_music = None
+    
+    def toggle_music(self):
+        """Toggle music on/off"""
+        self.music_enabled = not self.music_enabled
+        if not self.music_enabled:
+            self.stop_music()
+        else:
+            # Resume appropriate music based on game state
+            if not self.game_active:
+                self.play_music('menu')
+            else:
+                self.play_music('gameplay')
+    
+    def set_music_volume(self, volume):
+        """Set music volume (0.0 to 1.0)"""
+        self.music_volume = max(0.0, min(1.0, volume))
+        pygame.mixer.music.set_volume(self.music_volume)
 
     def reset_game(self):
         self.player_x = SCREEN_WIDTH // 2
@@ -186,6 +254,9 @@ class GameState:
         self.is_shrunk = False
         self.pulse_uses = 5
         self.screen_shake = 0
+        
+        # Start gameplay music
+        self.play_music('gameplay')
 
     def handle_input(self):
         keys = pygame.key.get_pressed()
@@ -376,6 +447,8 @@ class GameState:
                     self.high_score = self.score
                     self.save_high_score()
                 self.game_active = False
+                # Play game over music
+                self.play_music('gameover', loop=0)  # Play once
                 return
 
     def update_game_logic(self):
@@ -603,6 +676,15 @@ class GameState:
         shrink_color = GREEN if shrink_ready else RED
         shrink_text = self.small_font.render("Q: Shrink", True, shrink_color)
         self.screen.blit(shrink_text, (10, y_offset + 60))
+        
+        # Music controls
+        music_y = SCREEN_HEIGHT - 140
+        music_status = "ON" if self.music_enabled else "OFF"
+        music_text = self.small_font.render(f"M: Music ({music_status})", True, WHITE if self.music_enabled else GRAY)
+        self.screen.blit(music_text, (SCREEN_WIDTH - 200, music_y))
+        
+        volume_text = self.small_font.render(f"Volume: {int(self.music_volume * 100)}% (+/-)", True, GRAY)
+        self.screen.blit(volume_text, (SCREEN_WIDTH - 200, music_y + 20))
 
     def draw(self):
         self.screen.fill(BLACK)
@@ -633,7 +715,9 @@ class GameState:
                 "SHIFT: Dash (cooldown)",
                 "SPACE: Focus Mode (slows time)",
                 "E: Pulse (knock enemies away)",
-                "Q: Shrink (become smaller)"
+                "Q: Shrink (become smaller)",
+                "M: Toggle Music",
+                "+/-: Volume Control"
             ]
             
             for i, control in enumerate(controls):
@@ -699,6 +783,12 @@ class GameState:
                             self.game_active = True
                     elif event.key == pygame.K_p and self.game_active:
                         self.paused = not self.paused
+                    elif event.key == pygame.K_m:
+                        self.toggle_music()
+                    elif event.key == pygame.K_MINUS or event.key == pygame.K_KP_MINUS:
+                        self.set_music_volume(self.music_volume - 0.1)
+                    elif event.key == pygame.K_EQUALS or event.key == pygame.K_KP_PLUS:
+                        self.set_music_volume(self.music_volume + 0.1)
                     
                     # Handle abilities
                     if self.game_active and not self.paused:
@@ -714,6 +804,8 @@ class GameState:
             pygame.display.flip()
             self.clock.tick(FPS)
         
+        # Clean up
+        pygame.mixer.quit()
         pygame.quit()
 
 # Additional shape drawing methods (extending the draw_shape method)

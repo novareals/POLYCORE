@@ -1,0 +1,53 @@
+POLYCORE - Music Implementation Guide
+
+RECOMMENDED MUSIC SOURCES:
+============================
+
+1. OpenGameArt.org (CC0 - Public Domain)
+   - https://opengameart.org/content/cc0-retro-music
+   - Download individual tracks as OGG/MP3
+   - No attribution required (CC0)
+
+2. Freesound.org (Creative Commons)
+   - Search for "chiptune", "8-bit", "retro game music"
+   - Requires free account
+   - Check individual licenses
+
+3. Internet Archive Creative Commons Collections
+   - https://archive.org/details/creativecommonsv3
+   - Direct OGG downloads available
+   - Creative Commons licensed
+
+4. Soundimage.org Chiptunes
+   - https://soundimage.org/chiptunes/
+   - High-quality chiptune collection
+   - Requires attribution
+
+RECOMMENDED TRACKS FOR POLYCORE:
+===============================
+
+Menu Music: Calm, ambient chiptune loop
+- "8-Bit Perplexion" style tracks
+- Slow tempo, atmospheric
+
+Gameplay Music: Energetic, driving beat
+- "Arcade Puzzler" style tracks
+- Medium-fast tempo, rhythmic
+
+Game Over: Short stinger or calm track
+- Brief dramatic chord or gentle ambient
+
+INSTRUCTIONS:
+============
+1. Download 3 music files (OGG format preferred)
+2. Rename them as:
+   - menu_theme.ogg
+   - gameplay_theme.ogg  
+   - gameover_theme.ogg
+3. Place in the music/ directory
+4. Run the updated game with music support
+
+ATTRIBUTION:
+===========
+Remember to credit music authors as required by their licenses!
+Add credits to your game's about screen or README.
