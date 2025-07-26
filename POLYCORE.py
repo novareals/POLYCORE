@@ -9,6 +9,7 @@ from enum import Enum
 
 # Initialize Pygame
 pygame.init()
+pygame.mixer.init()
 
 # Constants
 SCREEN_WIDTH = 1200
@@ -112,6 +113,11 @@ class GameState:
         self.font = pygame.font.Font(None, 36)
         self.small_font = pygame.font.Font(None, 24)
         
+        # Music setup
+        self.music_enabled = True
+        self.music_loaded = False
+        self.load_music()
+        
         # Game state
         self.running = True
         self.game_active = False
@@ -147,6 +153,41 @@ class GameState:
         self.screen_shake = 0
         self.particles = []
         self.trail_points = []
+
+    def load_music(self):
+        """Load the background music"""
+        try:
+            if os.path.exists("game music.mp3"):
+                pygame.mixer.music.load("game music.mp3")
+                self.music_loaded = True
+                print("Music loaded successfully!")
+            else:
+                print("Music file 'game music.mp3' not found")
+                self.music_loaded = False
+        except pygame.error as e:
+            print(f"Error loading music: {e}")
+            self.music_loaded = False
+
+    def toggle_music(self):
+        """Toggle music on/off"""
+        if not self.music_loaded:
+            return
+            
+        self.music_enabled = not self.music_enabled
+        
+        if self.music_enabled:
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play(-1)  # Loop indefinitely
+            pygame.mixer.music.set_volume(0.7)
+        else:
+            pygame.mixer.music.stop()
+
+    def start_music(self):
+        """Start playing music if enabled"""
+        if self.music_loaded and self.music_enabled:
+            if not pygame.mixer.music.get_busy():
+                pygame.mixer.music.play(-1)  # Loop indefinitely
+                pygame.mixer.music.set_volume(0.7)
 
     def load_high_score(self) -> float:
         try:
@@ -577,6 +618,12 @@ class GameState:
         diff_text = self.small_font.render(f"Difficulty: {self.difficulty_multiplier:.1f}x", True, GRAY)
         self.screen.blit(diff_text, (10, 70))
         
+        # Music status
+        music_status = "ON" if self.music_enabled else "OFF"
+        music_color = GREEN if self.music_enabled else RED
+        music_text = self.small_font.render(f"Music (M): {music_status}", True, music_color)
+        self.screen.blit(music_text, (10, 90))
+        
         # Abilities cooldowns
         y_offset = SCREEN_HEIGHT - 100
         
@@ -633,7 +680,8 @@ class GameState:
                 "SHIFT: Dash (cooldown)",
                 "SPACE: Focus Mode (slows time)",
                 "E: Pulse (knock enemies away)",
-                "Q: Shrink (become smaller)"
+                "Q: Shrink (become smaller)",
+                "M: Toggle Music"
             ]
             
             for i, control in enumerate(controls):
@@ -697,8 +745,11 @@ class GameState:
                         if not self.game_active:
                             self.reset_game()
                             self.game_active = True
+                            self.start_music()  # Start music when game begins
                     elif event.key == pygame.K_p and self.game_active:
                         self.paused = not self.paused
+                    elif event.key == pygame.K_m:
+                        self.toggle_music()  # Toggle music with M key
                     
                     # Handle abilities
                     if self.game_active and not self.paused:
